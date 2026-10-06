@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RakshNova – AI Disaster Intelligence &amp; Emergency Response</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 5 9v10c0 9 6 15 15 18 9-3 15-9 15-18V9z" fill="#F26419"/><path d="M20 10v9m0 5v3" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg>
+    <div>
+      <h1>RakshNova</h1>
+      <p>AI Disaster Intelligence &amp; Emergency Response</p>
+    </div>
+  </div>
+  <div class="head-right">
+    <span class="clock" id="clock">--:--:--</span>
+    <div class="status" id="statusPill" data-lv="low" role="status">
+      <i></i><span id="statusText">Normal</span>
+    </div>
+  </div>
+</header>
+
+<div class="proto">Prototype: all data and “AI” analysis on this page are simulated for demonstration. Not real emergency data. In an emergency, call your local emergency number.</div>
+
+<div class="crit" id="critBanner" hidden role="alert">
+  <strong>CRITICAL RISK</strong>
+  <span id="critText"></span>
+</div>
+
+<main>
+  <section class="stats" aria-label="Live summary">
+    <div class="stat"><span>Current risk score</span><b id="sRisk">0</b><small>highest across zones</small></div>
+    <div class="stat"><span>People potentially affected</span><b id="sPeople">0</b><small>simulated estimate</small></div>
+    <div class="stat"><span>Active alerts</span><b id="sAlerts">0</b><small>last 3 hours</small></div>
+    <div class="stat"><span>High-risk zones</span><b id="sZones">0</b><small>score 55 or above</small></div>
+    <div class="stat"><span>Response priority</span><b id="sPrio">P4</b><small id="sPrioTxt">Routine</small></div>
+  </section>
+
+  <section>
+    <h2>Disaster overview</h2>
+    <div class="cards" id="overview"></div>
+  </section>
+
+  <div class="two">
+    <section class="panel">
+      <h2>AI risk analysis</h2>
+      <p class="note">Simulated model. Scores come from a weighted formula, not a trained or real forecasting system.</p>
+      <div class="form">
+        <label>Disaster type
+          <select id="type">
+            <option value="flood">Flood</option>
+            <option value="quake">Earthquake</option>
+            <option value="fire">Fire</option>
+            <option value="weather">Extreme weather</option>
+          </select>
+        </label>
+        <label>Location
+          <select id="loc"></select>
+        </label>
+        <label>Severity: <output id="sevOut">3 – Significant</output>
+          <input type="range" id="sev" min="1" max="5" value="3">
+        </label>
+        <label>Population density
+          <select id="dens">
+            <option value="20">Low (rural)</option>
+            <option value="50" selected>Medium (town)</option>
+            <option value="80">High (urban)</option>
+            <option value="100">Very high (dense city)</option>
+          </select>
+        </label>
+      </div>
+      <div class="btns">
+        <button class="primary" id="analyzeBtn" type="button">Analyze risk</button>
+        <button class="ghost" id="resetBtn" type="button">Reset</button>
+      </div>
+      <div class="result" id="result" aria-live="polite">
+        <p class="empty">Choose a disaster, location and severity, then select Analyze risk.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Early warnings</h2>
+      <div class="alerts" id="alerts"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>High-risk zone map <small>fictional region: Meridian Coast</small></h2>
+    <div class="mapwrap">
+      <div class="map" id="map">
+        <svg viewBox="0 0 100 62" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 0h100v62H0z" fill="#DDE7EB"/>
+          <path d="M0 38C12 34 20 44 32 46s20 8 30 16H0z" fill="#B9D3DF"/>
+          <path d="M0 50C14 46 22 54 36 55s16 4 22 7H0z" fill="#A4C6D6"/>
+          <path d="M44 0C46 10 40 16 48 24s18 6 20 16 8 14 14 22" fill="none" stroke="#8DBBD0" stroke-width="2.2"/>
+          <g fill="none" stroke="#B7C6CD" stroke-width=".35">
+            <ellipse cx="20" cy="14" rx="14" ry="8"/><ellipse cx="20" cy="14" rx="9" ry="5"/><ellipse cx="20" cy="14" rx="4" ry="2.2"/>
+            <ellipse cx="82" cy="30" rx="13" ry="9"/><ellipse cx="82" cy="30" rx="8" ry="5.5"/>
+            <path d="M0 20h100M0 40h100M25 0v62M50 0v62M75 0v62" stroke="#CAD6DC" stroke-width=".2"/>
+          </g>
+        </svg>
+        <div id="markers"></div>
+      </div>
+      <div class="zone" id="zoneDetail" aria-live="polite">
+        <p class="empty">Select a marker on the map to see zone details.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="two">
+    <section class="panel" id="response">
+      <h2>Emergency response</h2>
+      <div class="resp-head">
+        <div><span>Priority</span><b id="rPrio">P4</b></div>
+        <div><span>Focus</span><b id="rFocus">–</b></div>
+      </div>
+      <dl class="resp">
+        <dt>Evacuation</dt><dd id="rEvac"></dd>
+        <dt>Safe zone</dt><dd id="rSafe"></dd>
+      </dl>
+      <h3>Emergency contacts <small>sample numbers, verify locally</small></h3>
+      <ul class="contacts">
+        <li><b>112</b> National emergency</li>
+        <li><b>101</b> Fire</li>
+        <li><b>108</b> Ambulance</li>
+        <li><b>1078</b> Disaster management</li>
+      </ul>
+      <h3>Response checklist <small id="progress"></small></h3>
+      <ul class="check" id="checklist"></ul>
+    </section>
+
+    <section class="panel brief">
+      <h2>AI situation briefing</h2>
+      <p class="note">Generated from the selected analysis or zone. Simulated text.</p>
+      <div id="briefing"></div>
+    </section>
+  </div>
+</main>
+
+<footer>RakshNova hackathon prototype · simulated data only</footer>
+<script src="script.js"></script>
+</body>
+</html>
